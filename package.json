@@ -7,6 +7,6 @@
   },
   "dependencies": {
     "express": "^4.19.2",
-    "whoiser": "^2.13.0"
+    "whoiser": "^1.18.0"
   }
 }
