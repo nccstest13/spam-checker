@@ -100,5 +100,9 @@ app.get("/check", async (req, res) => {
   }
 });
 
+exec("which whois", (err, stdout) => {
+  console.log("WHOIS path:", stdout || "not found");
+});
+
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => console.log(`✅ Server running on http://localhost:${PORT}`));
