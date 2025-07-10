@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Domain Inspector</title>
+  <style>
+    body { font-family: Arial, sans-serif; max-width: 700px; margin: auto; padding: 2rem; }
+    input { padding: 0.5em; width: 300px; }
+    button { padding: 0.5em 1em; margin-left: 0.5em; }
+    pre { background: #f4f4f4; padding: 1em; border-radius: 8px; white-space: pre-wrap; }
+  </style>
+</head>
+<body>
+  <h1>🔍 Domain Inspector</h1>
+  <input id="domain" placeholder="example.com" />
+  <button onclick="check()">Check</button>
+  <pre id="output">Results will appear here...</pre>
+
+  <script>
+    async function check() {
+      const domain = document.getElementById("domain").value.trim();
+      if (!domain) return alert("Please enter a domain.");
+      document.getElementById("output").textContent = "Checking...";
+
+      try {
+        const res = await fetch(`/check?domain=${encodeURIComponent(domain)}`);
+        const data = await res.json();
+
+        if (data.error) {
+          document.getElementById("output").textContent = "❌ " + data.error;
+        } else {
+          document.getElementById("output").textContent = `
+🌐 Domain: ${data.domain}
+🔐 WHOIS Status: ${data.whoisStatus.join(", ") || "N/A"}
+📍 A Record IP: ${data.aRecord}
+🏢 IP Owner: ${data.ipOwner}
+📩 MX Records: ${data.mx.join(", ") || "None"}
+🛰️ NS Records: ${data.ns.join(", ") || "None"}
+🧼 SURBL Listed: ${data.blacklist.surbl ? "🚨 Yes" : "✅ No"}
+🕵️‍♀️ DBL Listed: ${data.blacklist.dbl ? "🚨 Yes" : "✅ No"}
+          `.trim();
+        }
+      } catch (err) {
+        document.getElementById("output").textContent = "⚠️ Error: " + err.message;
+      }
+    }
+  </script>
+</body>
+</html>
