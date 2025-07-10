@@ -4,16 +4,59 @@
   <meta charset="UTF-8">
   <title>Domain Inspector</title>
   <style>
-    body { font-family: Arial, sans-serif; max-width: 700px; margin: auto; padding: 2rem; }
-    input { padding: 0.5em; width: 300px; }
-    button { padding: 0.5em 1em; margin-left: 0.5em; }
-    pre { background: #f4f4f4; padding: 1em; border-radius: 8px; white-space: pre-wrap; }
+    body {
+      background-color: #121212;
+      color: #e0e0e0;
+      font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+      max-width: 800px;
+      margin: auto;
+      padding: 2rem;
+    }
+    h1 {
+      color: #90caf9;
+      font-size: 2.2rem;
+      text-align: center;
+    }
+    input {
+      padding: 0.8em;
+      width: 60%;
+      font-size: 1rem;
+      border-radius: 6px;
+      border: 1px solid #444;
+      background-color: #1e1e1e;
+      color: #e0e0e0;
+    }
+    button {
+      padding: 0.8em 1.2em;
+      font-size: 1rem;
+      margin-left: 0.5em;
+      border: none;
+      border-radius: 6px;
+      background-color: #2196f3;
+      color: white;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #1976d2;
+    }
+    pre {
+      background: #1e1e1e;
+      padding: 1.2em;
+      border-radius: 10px;
+      white-space: pre-wrap;
+      font-size: 1rem;
+      line-height: 1.6;
+      border: 1px solid #333;
+    }
   </style>
 </head>
 <body>
   <h1>🔍 Domain Inspector</h1>
-  <input id="domain" placeholder="example.com" />
-  <button onclick="check()">Check</button>
+  <div style="text-align: center;">
+    <input id="domain" placeholder="Enter domain e.g. namecheap.com" />
+    <button onclick="check()">Check</button>
+  </div>
+  <br />
   <pre id="output">Results will appear here...</pre>
 
   <script>
