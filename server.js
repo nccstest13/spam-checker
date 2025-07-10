@@ -10,19 +10,31 @@ app.use(express.static("public"));
 // WHOIS IP resolver
 function whoisIP(ip) {
   return new Promise((resolve) => {
-    exec(`whois ${ip}`, (err, stdout) => {
-      if (err) return resolve("WHOIS failed.");
-      
-      const lines = stdout.split("\n").map(line => line.trim());
-      const orgLine = lines.find(line =>
-        /^(OrgName|Org-Name|Orgname|netname|owner|CustName|descr):/i.test(line)
-      );
-      if (orgLine) {
-        const [, org] = orgLine.split(/:\s+/);
-        return resolve(org.trim());
+    exec(`whois ${ip}`, { maxBuffer: 1024 * 1024 }, (err, stdout, stderr) => {
+      if (err || !stdout) {
+        return resolve("WHOIS failed or unavailable.");
       }
 
-      resolve("Owner info not found.");
+      const orgFields = [
+        "OrgName", "org-name", "organisation", "owner", "netname", "descr", "CustName", "Org"
+      ];
+
+      const lines = stdout.split("\n");
+      for (const line of lines) {
+        const cleaned = line.trim();
+        const match = cleaned.match(/^([A-Za-z\-]+)\s*:\s*(.+)$/);
+
+        if (match) {
+          const key = match[1].toLowerCase();
+          const value = match[2].trim();
+
+          if (orgFields.some(f => f.toLowerCase() === key) && value.length > 2) {
+            return resolve(value);
+          }
+        }
+      }
+
+      return resolve("Owner info not found.");
     });
   });
 }
